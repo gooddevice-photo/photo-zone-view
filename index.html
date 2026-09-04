@@ -320,9 +320,11 @@ var PACKS = {
     eventGroup: "행사 스티커",
     filters: {
       none: "원본", bright: "화사하게", soft: "뽀샤시", vivid: "선명하게",
-      film: "필름", warm: "웜톤", cool: "쿨톤", mono: "흑백", sepia: "세피아"
+      film: "필름", warm: "웜톤", cool: "쿨톤", mono: "흑백", sepia: "세피아",
+      pastel: "파스텔", retro: "빈티지", berry: "딸기"
     },
-    groups: { teeth: "치아·구강", care: "진료·위생", praise: "칭찬·반짝", words: "문구" },
+    groups: { teeth: "치아·구강", care: "진료·위생", praise: "칭찬·반짝",
+              party: "축제·기분", hands: "표정·손", words: "문구" },
     words: ["충치 ZERO", "치아 건강", "스케일링 완료", "오늘도 칫솔질", "환한 미소"]
   },
   en: {
@@ -346,9 +348,11 @@ var PACKS = {
     eventGroup: "Event stickers",
     filters: {
       none: "Original", bright: "Bright", soft: "Soft", vivid: "Vivid",
-      film: "Film", warm: "Warm", cool: "Cool", mono: "B&W", sepia: "Sepia"
+      film: "Film", warm: "Warm", cool: "Cool", mono: "B&W", sepia: "Sepia",
+      pastel: "Pastel", retro: "Retro", berry: "Berry"
     },
-    groups: { teeth: "Teeth", care: "Dental care", praise: "Praise", words: "Words" },
+    groups: { teeth: "Teeth", care: "Dental care", praise: "Praise",
+              party: "Party", hands: "Faces & hands", words: "Words" },
     words: ["ZERO CAVITIES", "HEALTHY TEETH", "CLEANING DONE", "BRUSH DAILY", "BRIGHT SMILE"]
   },
   vi: {
@@ -372,9 +376,11 @@ var PACKS = {
     eventGroup: "Sticker sự kiện",
     filters: {
       none: "Gốc", bright: "Tươi sáng", soft: "Mềm mại", vivid: "Rực rỡ",
-      film: "Film", warm: "Ấm", cool: "Lạnh", mono: "Trắng đen", sepia: "Sepia"
+      film: "Film", warm: "Ấm", cool: "Lạnh", mono: "Trắng đen", sepia: "Sepia",
+      pastel: "Pastel", retro: "Hoài cổ", berry: "Dâu"
     },
-    groups: { teeth: "Răng miệng", care: "Chăm sóc", praise: "Khen ngợi", words: "Chữ" },
+    groups: { teeth: "Răng miệng", care: "Chăm sóc", praise: "Khen ngợi",
+              party: "Lễ hội", hands: "Mặt & tay", words: "Chữ" },
     words: ["KHÔNG SÂU RĂNG", "RĂNG KHỎE MẠNH", "ĐÃ LẤY CAO RĂNG", "ĐÁNH RĂNG MỖI NGÀY", "NỤ CƯỜI TƯƠI"]
   }
 };
@@ -477,7 +483,14 @@ var FILTERS = [
   { id: "warm",   m: [ 1.08,    0,      0,      0,  6,   0,        1.02,   0,      0,  0,   0,       0,       0.92,   0,  0] },
   { id: "cool",   m: [ 0.95,    0,      0,      0,  0,   0,        1.00,   0,      0,  0,   0,       0,       1.10,   0,  6] },
   { id: "mono",   m: [ 0.2126,  0.7152, 0.0722, 0,  0,   0.2126,   0.7152, 0.0722, 0,  0,   0.2126,  0.7152,  0.0722, 0,  0] },
-  { id: "sepia",  m: [ 0.393,   0.769,  0.189,  0,  0,   0.349,    0.686,  0.168,  0,  0,   0.272,   0.534,   0.131,  0,  0] }
+  { id: "sepia",  m: [ 0.393,   0.769,  0.189,  0,  0,   0.349,    0.686,  0.168,  0,  0,   0.272,   0.534,   0.131,  0,  0] },
+  // 파스텔 — 채도를 반쯤 빼고 전체를 들어올린다. 부스 조명이 노랗게 붙는 날
+  // 얼굴이 가장 편하게 나오는 값이라 손님이 제일 많이 고른다.
+  { id: "pastel", m: [ 0.72,    0.20,   0.08,   0, 30,   0.13,     0.79,   0.08,   0, 30,   0.13,    0.20,    0.67,   0, 32] },
+  // 빈티지 — 대비를 낮추고 청록을 살짝 얹는다. 필름보다 더 바랜 느낌.
+  { id: "retro",  m: [ 0.78,    0.14,   0.06,   0, 22,   0.06,     0.82,   0.10,   0, 20,   0.06,    0.16,    0.80,   0, 28] },
+  // 딸기 — 행사 색(#A62A5E) 쪽으로 붉게 민다. 치위생 부스라 분홍이 어울린다.
+  { id: "berry",  m: [ 1.10,    0.06,   0.02,   0,  4,   0.02,     0.92,   0.04,   0,  2,   0.06,    0.06,    1.00,   0,  8] }
 ];
 
 // 내장 스티커 — 치과·치위생 행사용.
@@ -490,6 +503,8 @@ function buildStickers() {
     { label: T.groups.teeth,  items: ["🦷","🪥","🫧","😁","😄","😬","😷"] },
     { label: T.groups.care,   items: ["🩺","🏥","🧑‍⚕️","🩹","💊","🧼"] },
     { label: T.groups.praise, items: ["✨","💎","⭐","💯","👍","🥇","🎉","💙"] },
+    { label: T.groups.party,  items: ["🎪","🎈","🎀","🌸","🌷","🍀","☀️","🌈","🩷"] },
+    { label: T.groups.hands,  items: ["🥰","😍","🤩","😆","🫶","🙌","👏","✌️","🤍"] },
     { label: T.groups.words,  items: T.words, text: true }
   ];
 }
