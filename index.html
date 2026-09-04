@@ -314,7 +314,6 @@ var PACKS = {
     save: "사진 저장하기",
     saving: "만드는 중…",
     saveFailed: "저장하지 못했어요. 사진을 길게 눌러 저장해 주세요.",
-    saved: "저장했어요!",
     savedCheck: "저장했어요! 안 보이면 사진첩·다운로드를 확인해 주세요.",
     sheetTitle: "스티커 붙이기",
     sheetHow: "누르면 사진 가운데에 붙어요. 끌어서 옮기고, 오른쪽 아래 손잡이로 크기·각도를 맞춘 뒤 오른쪽 위 ✓ 를 누르면 됩니다.",
@@ -341,7 +340,6 @@ var PACKS = {
     save: "Save photo",
     saving: "Creating…",
     saveFailed: "Could not save. Press and hold the photo to save it.",
-    saved: "Saved!",
     savedCheck: "Saved! If you can't find it, check your photos or downloads.",
     sheetTitle: "Add stickers",
     sheetHow: "Tap one to place it in the middle of the photo. Drag to move it, use the handle at the bottom right to resize and rotate, then tap ✓ at the top right.",
@@ -368,7 +366,6 @@ var PACKS = {
     save: "Lưu ảnh",
     saving: "Đang tạo…",
     saveFailed: "Không lưu được. Hãy nhấn giữ ảnh để lưu.",
-    saved: "Đã lưu!",
     savedCheck: "Đã lưu! Nếu không thấy, hãy kiểm tra thư viện ảnh hoặc thư mục tải về.",
     sheetTitle: "Dán sticker",
     sheetHow: "Nhấn để dán vào giữa ảnh. Kéo để di chuyển, dùng tay cầm ở góc dưới phải để đổi kích thước và góc, rồi nhấn ✓ ở góc trên phải.",
@@ -1076,18 +1073,14 @@ function startEditor(image) {
   });
 
   function saveBlob(blob) {
-    var name = "GoodDevice-photo-" + id + ".jpg";
-    var file = null;
-    try { file = new File([blob], name, { type: "image/jpeg" }); } catch (err) { file = null; }
-
-    // 폰에서는 공유 시트로 넘기는 쪽이 사진첩에 바로 저장돼 손님이 헤매지 않는다.
-    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file] })
-        .then(function () { toast(T.saved); })
-        .catch(function () { downloadBlob(blob, name); });
-      return;
-    }
-    downloadBlob(blob, name);
+    // **그냥 받아간다 — 공유 시트를 띄우지 않는다.**
+    //
+    // 예전엔 navigator.share로 넘겼다. 사진첩에 바로 들어가니 더 친절할 거라
+    // 보았는데, 부스에서는 반대였다 — "저장"을 눌렀더니 카톡·메시지가 깔린
+    // 공유 판이 뜨니 손님이 "이걸 보내라는 건가" 하고 멈춘다. 줄이 선 부스에서
+    // 눈앞에 물음표가 하나 더 뜨는 것보다, 바로 받아지고 나중에 찾는 편이 낫다.
+    // 공유는 폰 사진첩에서 언제든 할 수 있다.
+    downloadBlob(blob, "GoodDevice-photo-" + id + ".jpg");
   }
 
   function downloadBlob(blob, name) {
